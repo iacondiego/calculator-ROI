@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import html2pdf from 'html2pdf.js';
 
 interface FormData {
   consultas: number | '';
@@ -30,10 +29,13 @@ export default function CalculadoraROI() {
   const [roiResult, setRoiResult] = useState<string | null>(null);
   const pdfContentRef = useRef<HTMLDivElement>(null);
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     if (!pdfContentRef.current || !roiResult) return;
     
     try {
+      // Importar html2pdf dinámicamente solo en el cliente
+      const html2pdf = (await import('html2pdf.js')).default;
+      
       const element = pdfContentRef.current;
       
       // Hacer visible temporalmente el elemento
